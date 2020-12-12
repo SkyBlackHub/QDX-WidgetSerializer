@@ -3,6 +3,7 @@
 #include <QSettings>
 #include <QMainWindow>
 #include <QCheckBox>
+#include <QPushButton>
 #include <QRadioButton>
 #include <QSpinBox>
 #include <QLineEdit>
@@ -44,6 +45,26 @@ bool QDX::WidgetSerializer::save(QCheckBox *widget, const QString &name) const
 bool QDX::WidgetSerializer::load(QCheckBox *widget, const QString &name) const
 {
 	validate_contains(widget, name);
+	widget->setChecked(m_settings.value(key).toBool());
+	return true;
+}
+
+bool QDX::WidgetSerializer::save(QPushButton *widget, const QString &name) const
+{
+	validate(widget, name);
+	if (widget->isCheckable() == false) {
+		return false;
+	}
+	m_settings.setValue(key, widget->isChecked());
+	return true;
+}
+
+bool QDX::WidgetSerializer::load(QPushButton *widget, const QString &name) const
+{
+	validate_contains(widget, name);
+	if (widget->isCheckable() == false) {
+		return false;
+	}
 	widget->setChecked(m_settings.value(key).toBool());
 	return true;
 }
@@ -290,6 +311,7 @@ bool QDX::WidgetSerializer::load(QComboBox *widget, const QString &name) const
 bool QDX::WidgetSerializer::save(QWidget *widget, const QString &name, bool *casted) const
 {
 	saveCast(QCheckBox, widget);
+	saveCast(QPushButton, widget);
 	saveCast(QRadioButton, widget);
 	saveCast(QSpinBox, widget);
 	saveCast(QDoubleSpinBox, widget);
@@ -306,6 +328,7 @@ bool QDX::WidgetSerializer::save(QWidget *widget, const QString &name, bool *cas
 bool QDX::WidgetSerializer::load(QWidget *widget, const QString &name, bool *casted) const
 {
 	loadCast(QCheckBox, widget);
+	loadCast(QPushButton, widget);
 	loadCast(QRadioButton, widget);
 	loadCast(QSpinBox, widget);
 	loadCast(QDoubleSpinBox, widget);

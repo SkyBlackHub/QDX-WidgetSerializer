@@ -6,6 +6,7 @@ class QSettings;
 class QWidget;
 class QMainWindow;
 class QCheckBox;
+class QPushButton;
 class QRadioButton;
 class QSpinBox;
 class QDoubleSpinBox;
@@ -36,6 +37,9 @@ namespace QDX {
 
 		virtual bool save(QCheckBox *widget, const QString &name = QString()) const;
 		virtual bool load(QCheckBox *widget, const QString &name = QString()) const;
+
+		virtual bool save(QPushButton *widget, const QString &name = QString()) const;
+		virtual bool load(QPushButton *widget, const QString &name = QString()) const;
 
 		virtual bool save(QRadioButton *widget, const QString &name = QString()) const;
 		virtual bool load(QRadioButton *widget, const QString &name = QString()) const;
