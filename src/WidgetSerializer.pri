@@ -4,4 +4,5 @@ DEPENDPATH += $$PWD
 VPATH += $$PWD
 
 SOURCES += WidgetSerializer.cpp
-HEADERS += WidgetSerializer.h
+HEADERS += WidgetSerializer.h \
+  SerializableWidget.h

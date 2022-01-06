@@ -23,6 +23,8 @@ class QActionGroup;
 
 namespace QDX {
 
+	class SerializableWidget;
+
 	class WidgetSerializer
 	{
 	public:
@@ -67,6 +69,9 @@ namespace QDX {
 
 		virtual bool save(QComboBox *widget, const QString &name = QString()) const;
 		virtual bool load(QComboBox *widget, const QString &name = QString()) const;
+
+		virtual bool save(SerializableWidget *widget, const QString &name = QString()) const;
+		virtual bool load(SerializableWidget *widget, const QString &name = QString()) const;
 
 		virtual bool save(QWidget *widget, const QString &name = QString(), bool *casted = nullptr) const;
 		virtual bool load(QWidget *widget, const QString &name = QString(), bool *casted = nullptr) const;

@@ -13,6 +13,8 @@
 #include <QMenu>
 #include <QStackedWidget>
 
+#include "SerializableWidget.h"
+
 QDX::WidgetSerializer::WidgetSerializer(QSettings &settings) : m_settings(settings)
 {
 
@@ -190,7 +192,7 @@ bool QDX::WidgetSerializer::save(QActionGroup *group, const QString &name) const
 	validate(group, name);
 	purifyActionName(key);
 	QString child_name;
-	for (QAction *action : group->actions()) {
+	foreach (QAction *action, group->actions()) {
 		if (action->isCheckable() == false) {
 			continue;
 		}
@@ -217,7 +219,7 @@ bool QDX::WidgetSerializer::load(QActionGroup *group, const QString &name) const
 	QString value = m_settings.value(key).toString();
 
 	QString child_name;
-	for (QAction *action : group->actions()) {
+	foreach (QAction *action, group->actions()) {
 		if (action->isCheckable() == false) {
 			continue;
 		}
@@ -305,11 +307,26 @@ bool QDX::WidgetSerializer::load(QComboBox *widget, const QString &name) const
 	return true;
 }
 
+bool QDX::WidgetSerializer::save(SerializableWidget *widget, const QString &name) const
+{
+	validate(widget, name);
+	widget->save(key, m_settings);
+	return true;
+}
+
+bool QDX::WidgetSerializer::load(SerializableWidget *widget, const QString &name) const
+{
+	validate_contains(widget, name);
+	widget->load(key, m_settings);
+	return true;
+}
+
 #define saveCast(type, object) if (type *casted_object = qobject_cast<type *>(object)) { if (casted) { *casted = true; } return this->save(casted_object, name); }
 #define loadCast(type, object) if (type *casted_object = qobject_cast<type *>(object)) { if (casted) { *casted = true; } return this->load(casted_object, name); }
 
 bool QDX::WidgetSerializer::save(QWidget *widget, const QString &name, bool *casted) const
 {
+	saveCast(SerializableWidget, widget);
 	saveCast(QCheckBox, widget);
 	saveCast(QPushButton, widget);
 	saveCast(QRadioButton, widget);
@@ -327,6 +344,7 @@ bool QDX::WidgetSerializer::save(QWidget *widget, const QString &name, bool *cas
 
 bool QDX::WidgetSerializer::load(QWidget *widget, const QString &name, bool *casted) const
 {
+	loadCast(SerializableWidget, widget);
 	loadCast(QCheckBox, widget);
 	loadCast(QPushButton, widget);
 	loadCast(QRadioButton, widget);
